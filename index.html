@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TV Apps Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Cairo', sans-serif;
+    background: #0f0f0f;
+    color: #fff;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    padding: 20px;
+    text-align: center;
+    border-bottom: 3px solid #00d084;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 20px rgba(0,208,132,0.2);
+  }
+
+  header h1 {
+    font-size: 28px;
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: 1px;
+  }
+
+  header h1 span {
+    color: #00d084;
+  }
+
+  header p {
+    font-size: 13px;
+    color: #aaa;
+    margin-top: 4px;
+  }
+
+  /* SEARCH */
+  .search-box {
+    padding: 16px 16px 0;
+  }
+
+  .search-box input {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: none;
+    background: #1e1e1e;
+    color: #fff;
+    font-family: 'Cairo', sans-serif;
+    font-size: 15px;
+    outline: none;
+    border: 1px solid #333;
+    transition: border 0.3s;
+  }
+
+  .search-box input:focus {
+    border-color: #00d084;
+  }
+
+  .search-box input::placeholder {
+    color: #666;
+  }
+
+  /* FILTERS */
+  .filters {
+    display: flex;
+    gap: 8px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    flex-wrap: wrap;
+  }
+
+  .filters::-webkit-scrollbar { display: none; }
+
+  .filter-btn {
+    padding: 7px 18px;
+    border-radius: 20px;
+    border: 1.5px solid #333;
+    background: #1a1a1a;
+    color: #ccc;
+    font-family: 'Cairo', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .filter-btn.active, .filter-btn:hover {
+    background: #00d084;
+    border-color: #00d084;
+    color: #000;
+    font-weight: 700;
+  }
+
+  /* APPS GRID */
+  .apps-list {
+    padding: 8px 16px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .app-card {
+    background: #1a1a1a;
+    border-radius: 16px;
+    padding: 16px;
+    border: 1px solid #2a2a2a;
+    transition: border 0.3s, transform 0.2s;
+    animation: fadeIn 0.4s ease both;
+  }
+
+  .app-card:hover {
+    border-color: #00d084;
+    transform: translateY(-2px);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .app-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+
+  .app-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    flex-shrink: 0;
+  }
+
+  .app-info { flex: 1; }
+
+  .app-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .app-cat {
+    font-size: 12px;
+    color: #00d084;
+    margin-top: 2px;
+  }
+
+  .app-version {
+    background: #2a2a2a;
+    color: #aaa;
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid #333;
+    font-family: monospace;
+    white-space: nowrap;
+  }
+
+  .app-filename {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 12px;
+    padding: 6px 10px;
+    background: #111;
+    border-radius: 8px;
+    word-break: break-all;
+    direction: ltr;
+    text-align: left;
+  }
+
+  .download-btn {
+    width: 100%;
+    padding: 13px;
+    border-radius: 12px;
+    border: none;
+    background: linear-gradient(135deg, #00d084, #00b570);
+    color: #000;
+    font-family: 'Cairo', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+  }
+
+  .download-btn:hover {
+    background: linear-gradient(135deg, #00e894, #00d084);
+    transform: scale(1.01);
+    box-shadow: 0 4px 16px rgba(0,208,132,0.4);
+  }
+
+  .download-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* EMPTY */
+  .empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: #555;
+    display: none;
+  }
+
+  .empty svg { margin-bottom: 12px; opacity: 0.4; }
+
+  /* COUNT */
+  .count-bar {
+    padding: 0 16px 8px;
+    font-size: 12px;
+    color: #555;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📺 TV <span>Apps</span> Store</h1>
+  <p>حمّل أفضل تطبيقات التلفزيون</p>
+</header>
+
+<div class="search-box">
+  <input type="text" id="searchInput" placeholder="🔍 ابحث عن تطبيق..." oninput="filterApps()">
+</div>
+
+<div class="filters" id="filters">
+  <button class="filter-btn active" onclick="setFilter('الكل', this)">الكل</button>
+  <button class="filter-btn" onclick="setFilter('رياضة', this)">رياضة</button>
+  <button class="filter-btn" onclick="setFilter('سينما', this)">سينما</button>
+  <button class="filter-btn" onclick="setFilter('أدوات', this)">أدوات</button>
+  <button class="filter-btn" onclick="setFilter('IPTV', this)">IPTV</button>
+</div>
+
+<div class="count-bar" id="countBar"></div>
+
+<div class="apps-list" id="appsList"></div>
+<div class="empty" id="emptyState">
+  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+  <p>ما لقينا نتائج</p>
+</div>
+
+<script>
+// ===== بيانات التطبيقات =====
+// !! غيّر روابط download_url لروابط Google Drive أو Telegram الخاصة بك !!
+const apps = [
+  {
+    name: "Ostora TV",
+    version: "v6.9 VIP",
+    category: "رياضة",
+    icon: "🏆",
+    icon_bg: "#1a1a3e",
+    filename: "Ostora_TV_v6_9_VIP.apk",
+    download_url: "PASTE_LINK_HERE"
+  },
+  {
+    name: "Drama Live",
+    version: "v13.0.3 MOD",
+    category: "رياضة",
+    icon: "🎬",
+    icon_bg: "#1e1a1a",
+    filename: "Drama_Live_v13_0_3-mod.apk",
+    download_url: "PASTE_LINK_HERE"
+  },
+  {
+    name: "GENRAL PRO",
+    version: "v2.14",
+    category: "رياضة",
+    icon: "⚡",
+    icon_bg: "#1a1e1a",
+    filename: "GENRAL_PRO_2_14.apk",
+    download_url: "PASTE_LINK_HERE"
+  },
+  {
+    name: "NETFLY TV",
+    version: "v3.0.2",
+    category: "رياضة",
+    icon: "📡",
+    icon_bg: "#1a1a1e",
+    filename: "NETFLY_TV_V3_0_2_Mobilltna.apk",
+    download_url: "PASTE_LINK_HERE"
+  },
+  {
+    name: "1 IRAQ TV",
+    version: "v1",
+    category: "رياضة",
+    icon: "🇮🇶",
+    icon_bg: "#1e1a1a",
+    filename: "1_IRAQ_TV__v1_apk.bak",
+    download_url: "PASTE_LINK_HERE"
+  }
+];
+
+let currentFilter = 'الكل';
+
+function setFilter(cat, btn) {
+  currentFilter = cat;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filterApps();
+}
+
+function filterApps() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const list = document.getElementById('appsList');
+  const empty = document.getElementById('emptyState');
+  const countBar = document.getElementById('countBar');
+  list.innerHTML = '';
+
+  const filtered = apps.filter(app => {
+    const matchCat = currentFilter === 'الكل' || app.category === currentFilter;
+    const matchQ = app.name.toLowerCase().includes(q) || app.category.includes(q);
+    return matchCat && matchQ;
+  });
+
+  countBar.textContent = `${filtered.length} تطبيق`;
+
+  if (filtered.length === 0) {
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  filtered.forEach((app, i) => {
+    const card = document.createElement('div');
+    card.className = 'app-card';
+    card.style.animationDelay = `${i * 0.07}s`;
+    card.innerHTML = `
+      <div class="app-header">
+        <div class="app-icon" style="background:${app.icon_bg}">${app.icon}</div>
+        <div class="app-info">
+          <div class="app-name">${app.name}</div>
+          <div class="app-cat">${app.category}</div>
+        </div>
+        <span class="app-version">${app.version}</span>
+      </div>
+      <div class="app-filename">${app.filename}</div>
+      <a class="download-btn" href="${app.download_url}" ${app.download_url !== 'PASTE_LINK_HERE' ? 'download' : 'onclick="alert(\'الرابط غير متاح بعد\')"'}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        تحميل
+      </a>
+    `;
+    list.appendChild(card);
+  });
+}
+
+// تشغيل أول مرة
+filterApps();
+</script>
+</body>
+</html>
